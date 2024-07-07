@@ -1,0 +1,4 @@
+repository "landscape-mantis@isaac_gutterman@cloud"
+  path "/"
+    br "/main"
+    co "/main"

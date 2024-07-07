@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3e70342095a304908a382d8b2efaef78
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - houseCsvFile: {fileID: 4900000, guid: abab14cf8a7584984867fc1d2e5d2db4, type: 3}
+  - mstCsvFile: {fileID: 4900000, guid: e886b8b4a302b488ab1b21d4a75367dc, type: 3}
+  - terrain: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
