@@ -1,7 +1,10 @@
-# .vercelignore
 UnityProject/
+.git/
+.vscode/
+.DS_Store
 *.log
 *.tmp
 *.cache
-*.DS_Store
 node_modules/
+__pycache__/
+*.pyc
