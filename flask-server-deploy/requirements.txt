@@ -1,0 +1,9 @@
+# FlaskServer/requirements.txt
+flask
+pandas
+numpy
+scikit-learn
+umap-learn
+scipy
+openai
+python-dotenv
