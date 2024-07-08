@@ -1,10 +1,18 @@
 {
-    "version": 2,
-    "builds": [
-      { "src": "app.py", "use": "@vercel/python" }
-    ],
-    "routes": [
-      { "src": "/(.*)", "dest": "app.py" }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [
+    {
+      "src": "FlaskServer/app.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "FlaskServer/static/webgl/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/webgl/(.*)", "dest": "/FlaskServer/static/webgl/$1" },
+    { "src": "/api/(.*)", "dest": "/FlaskServer/app.py" },
+    { "src": "/", "dest": "/FlaskServer/app.py" }
+  ]
+}
