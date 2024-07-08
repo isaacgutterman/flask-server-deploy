@@ -1,7 +1,8 @@
-Flask
+# requirements.txt
+flask
 pandas
 numpy
-sklearn
+scikit-learn
 umap-learn
 scipy
 openai
