@@ -1,0 +1,8 @@
+Flask
+pandas
+numpy
+sklearn
+umap-learn
+scipy
+openai
+python-dotenv
