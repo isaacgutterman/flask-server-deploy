@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask_cors import CORS
 import pandas as pd
 import numpy as np
 from MSTcoord import ClusterCreator
 import os
-
 app = Flask(__name__)
+CORS(app)  # Enable CORS for the Flask app
 
 @app.route('/')
 def index():

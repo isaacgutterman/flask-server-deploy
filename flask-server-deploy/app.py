@@ -1,44 +1,42 @@
-from flask import Flask, request, jsonify, render_template, send_from_directory
-import pandas as pd
-import numpy as np
-from MSTcoord import ClusterCreator
 import os
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import MSTcoord
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return app.send_static_file('index.html')
 
-@app.route('/webgl/<path:filename>')
-def serve_webgl(filename):
-    return send_from_directory('static/webgl', filename)
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    if file:
+        filename = os.path.join('/tmp', file.filename)
+        file.save(filename)
+        return jsonify({"message": "File uploaded successfully", "filename": filename}), 200
 
 @app.route('/process', methods=['POST'])
 def process_data():
-    if 'csv_file' not in request.files:
-        return jsonify({"message": "No file part in the request"}), 400
-    file = request.files['csv_file']
-    if file.filename == '':
-        return jsonify({"message": "No selected file"}), 400
-    if file and file.filename.endswith('.csv'):
-        filepath = os.path.join('/tmp', file.filename)
-        file.save(filepath)
-        max_cluster_depth = 2
-        min_nodes = 10
-        message = process_csv(filepath, max_cluster_depth, min_nodes)
-        return jsonify({"message": message})
-    else:
-        return jsonify({"message": "Invalid file type, please upload a CSV file"}), 400
+    filepath = request.json['filepath']
+    max_cluster_depth = request.json.get('max_cluster_depth', 10)
+    min_nodes = request.json.get('min_nodes', 5)
+    message = process_csv(filepath, max_cluster_depth, min_nodes)
+    return jsonify({"message": message})
 
 def process_csv(csv_file, max_cluster_depth, min_nodes):
-    cluster_creator = ClusterCreator(max_cluster_depth, min_nodes)
+    cluster_creator = MSTcoord.ClusterCreator(max_cluster_depth, min_nodes)
     cluster_creator.load_skills_data_from_csv(csv_file)
     cluster_creator.make_clusters()
-    cluster_creator.create_connections()
-    cluster_creator.save_mst_to_csv("/tmp/MST_coord.csv")
-    cluster_creator.save_to_files()
-    return "Processing complete and files saved."
+    return "Processing completed successfully"
 
 if __name__ == '__main__':
     app.run(debug=True)

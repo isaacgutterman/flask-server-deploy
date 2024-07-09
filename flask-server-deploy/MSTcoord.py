@@ -12,19 +12,23 @@ import os
 
 # Load OpenAI API key from environment variable for security
 load_dotenv()
-api_key = os.getenv("apikey")
+api_key = os.getenv("OPENAI_API_KEY")
 openai.api_key = api_key
 
 def get_embeddings_batch(inputs):
     embeddings = []
     for input_text in inputs:
-        response = openai.Embedding.create(
-            input=input_text,
-            model="text-embedding-ada-002"
-        )
-        embedding = np.array(response['data'][0]['embedding'])
-        embeddings.append(embedding)
-    return np.array(embeddings)
+        try:
+            response = openai.Embedding.create(
+                input=input_text,
+                model="text-embedding-3-large"
+            )
+            embedding = np.array(response['data'][0]['embedding'])
+            embeddings.append(embedding)
+        except Exception as e:
+            print(f"Error getting embedding for input: {input_text[:30]}... Error: {e}")
+            embeddings.append(None)
+    return embeddings
 
 def cosine_similarity(a, b):
     dot_product = np.dot(a, b)

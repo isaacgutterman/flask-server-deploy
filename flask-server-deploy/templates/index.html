@@ -3,29 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSV File Upload</title>
+    <title>CSV Upload</title>
 </head>
 <body>
     <h1>Upload CSV File</h1>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <input type="file" id="fileInput" name="file" accept=".csv" required>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="csv-file" name="csv_file" accept=".csv">
         <button type="submit">Upload</button>
     </form>
-    <p id="status"></p>
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+        document.getElementById('upload-form').addEventListener('submit', async function(event) {
             event.preventDefault();
-            const fileInput = document.getElementById('fileInput');
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
+            const fileInput = document.getElementById('csv-file');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file.');
+                return;
+            }
 
-            const response = await fetch('/upload', {
+            const formData = new FormData();
+            formData.append('csv_file', fileInput.files[0]);
+
+            const response = await fetch('/process', {
                 method: 'POST',
                 body: formData
             });
 
-            const result = await response.json();
-            document.getElementById('status').textContent = result.message;
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Upload successful:', data);
+                // Redirect to the Unity WebGL game or update the game state
+                window.location.href = '/webgl/index.html'; // Adjust the path as needed
+            } else {
+                const error = await response.json();
+                console.error('Error:', error);
+            }
         });
     </script>
 </body>

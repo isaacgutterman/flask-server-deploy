@@ -1,0 +1,22 @@
+{
+  "builds": [
+    {
+      "src": "FlaskServer/app.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "static/webgl/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "FlaskServer/app.py"
+    },
+    {
+      "src": "/webgl/(.*)",
+      "dest": "/static/webgl/$1"
+    }
+  ]
+}
